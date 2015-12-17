@@ -1,88 +1,179 @@
-#include "SDL/SDL.h"
+/*This source code copyrighted by Lazy Foo' Productions (2004-2015)
+and may not be redistributed without written permission.*/
+
+//Using SDL and standard IO
+#include <SDL2\SDL.h>
+#include <stdio.h>
 #include <string>
 
+
+//Screen dimension constants
 const int SCREEN_WIDTH = 640;
 const int SCREEN_HEIGHT = 480;
-const int SCREEN_BPP = 32;
 
-SDL_Surface *message = NULL;
-SDL_Surface *background = NULL;
-SDL_Surface *screen = NULL;
+//The window we'll be rendering to
+SDL_Window* gWindow = NULL;
+    
+//The surface contained by the window
+SDL_Surface* gScreenSurface = NULL;
 
-// Function is used to optimise an image to the correct display format when the image is loaded. 
-// Otherwise SDL has to convert the images on the fly everytime
-SDL_Surface *load_image( std::string filename ) 
+//The image we will load and show on the screen
+SDL_Surface* gSpace = NULL;
+
+SDL_Surface* loadSurface( std::string path );
+
+//Starts up SDL and creates window
+bool init()
 {
-    SDL_Surface* loadedImage = NULL;
-    SDL_Surface* optimizedImage = NULL;
-    loadedImage = SDL_LoadBMP( filename.c_str() );
+    //Initialization flag
+    bool success = true;
 
-    if( loadedImage != NULL )
+    //Initialize SDL
+    if( SDL_Init( SDL_INIT_VIDEO ) < 0 )
     {
-        optimizedImage = SDL_DisplayFormat( loadedImage );
-
-        SDL_FreeSurface( loadedImage );
+        printf( "SDL could not initialize! SDL_Error: %s\n", SDL_GetError() );
+        success = false;
     }
-    return optimizedImage;
+    else
+    {
+        //Create window
+        gWindow = SDL_CreateWindow( "Orbit", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN );
+        if( gWindow == NULL )
+        {
+            printf( "Window could not be created! SDL_Error: %s\n", SDL_GetError() );
+            success = false;
+        }
+        else
+        {
+            //Get window surface
+            gScreenSurface = SDL_GetWindowSurface( gWindow );
+        }
+    }
+
+    return success;
 }
 
-void apply_surface( int x, int y, SDL_Surface* source, SDL_Surface* destination )
+//Loads media
+bool loadMedia()
 {
-    SDL_Rect offset;
-    offset.x = x;
-    offset.y = y;
-    SDL_BlitSurface( source, NULL, destination, &offset );
+    //Loading success flag
+    bool success = true;
+
+    //Load splash image
+    gSpace = SDL_LoadBMP( "resources/space.bmp" );
+    if( gSpace == NULL )
+    {
+        printf( "Unable to load image %s! SDL Error: %s\n", "resources/space.bmp", SDL_GetError() );
+        success = false;
+    }
+
+    return success;
 }
 
-int main (int argc, char* args[]){
+//Frees media and shuts down SDL
+void close()
+{
+    //Deallocate surface
+    SDL_FreeSurface( gSpace );
+    gSpace = NULL;
 
-	// initialise. if something goes wrong stop everything
-    if( SDL_Init( SDL_INIT_EVERYTHING ) == -1 )
-    {
-        return 1;    
-    }
+    //Destroy window
+    SDL_DestroyWindow( gWindow );
+    gWindow = NULL;
 
-	//Set up the screen
-    screen = SDL_SetVideoMode( SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_BPP, SDL_SWSURFACE );
-
-    //If there was an error in setting up the screen
-    if( screen == NULL )
-    {
-        return 1;    
-    }
-
-    //Set the window caption
-    SDL_WM_SetCaption( "Orbit", NULL );
-    
-    //Load the images
-    message = load_image( "resources/doge.bmp" );
-    background = load_image( "resources/space.bmp" );
-
-    //Apply the background to the screen
-    apply_surface( 0, 0, background, screen );
-    apply_surface( 320, 0, background, screen );
-    apply_surface( 0, 240, background, screen );
-    apply_surface( 320, 240, background, screen );
-
-    //Apply the message to the screen
-    apply_surface( 180, 140, message, screen );
-
-    //Update the screen
-    if( SDL_Flip( screen ) == -1 )
-    {
-        return 1;    
-    }
-
-    //Wait 2 seconds
-    SDL_Delay( 2000 );
-    
-    //Free the surfaces
-    SDL_FreeSurface( message );
-    SDL_FreeSurface( background );
-    
-    //Quit SDL
+    //Quit SDL subsystems
     SDL_Quit();
-    
-    //Return
+}
+
+SDL_Surface* loadSurface( std::string path )
+{
+    //Load image at specified path
+    SDL_Surface* loadedSurface = SDL_LoadBMP( path.c_str() );
+    if( loadedSurface == NULL )
+    {
+        printf( "Unable to load image %s! SDL Error: %s\n", path.c_str(), SDL_GetError() );
+    }
+
+    return loadedSurface;
+}
+
+int main( int argc, char* args[] )
+{
+    //Start up SDL and create window
+    if( !init() )
+    {
+        printf( "Failed to initialize!\n" );
+    }
+    else
+    {
+        //Load media
+        if( !loadMedia() )
+        {
+            printf( "Failed to load media!\n" );
+        }
+        else
+        {
+            //Apply the image
+            SDL_BlitSurface( gSpace, NULL, gScreenSurface, NULL );
+
+            //Update the surface
+            SDL_UpdateWindowSurface( gWindow );
+
+            //Wait two seconds
+            SDL_Delay( 2000 );
+        }
+
+
+        //Main loop flag
+        bool quit = false;
+
+        //Event handler
+        SDL_Event e;
+
+        //While application is running
+        //CORE GAME LOOP
+        while( !quit )
+        {
+            //Handle events on queue
+            while( SDL_PollEvent( &e ) != 0 )
+            {
+                //User requests quit
+                if( e.type == SDL_QUIT )
+                {
+                    quit = true;
+                }
+                else if ( e.type == SDL_KEYDOWN )
+                {
+                    switch( e.key.keysym.sym )
+                    {
+                        case SDLK_UP:
+                        printf("Up!");
+                        break;
+
+                        case SDLK_DOWN:
+                        printf("Down!");
+                        break;
+
+                        case SDLK_LEFT:
+                        printf("Left!");
+                        break;
+
+                        case SDLK_RIGHT:
+                        printf("Right!");
+                        break;
+                    }
+                }
+            }
+            //Apply the image
+            SDL_BlitSurface( gSpace, NULL, gScreenSurface, NULL );
+        
+            //Update the surface
+            SDL_UpdateWindowSurface( gWindow );
+        }
+    }
+
+    //Free resources and close SDL
+    close();
+
     return 0;
 }
