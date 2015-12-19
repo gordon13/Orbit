@@ -62,25 +62,10 @@ bool get_levels()
         printf( "File doesn't exist\n");
         return false;
     }
-    printf( "1\n");
-    char readBuffer[65536];
-    printf( "2\n");
-
-    //FileReadStream is(fp, readBuffer, sizeof(readBuffer));
-    StringStream is(fp);
-    printf( "3\n");
+    char readBuffer[655360];
+    FileReadStream is(fp, readBuffer, sizeof(readBuffer));
     levelsDocument.ParseStream(is);
-    printf( "4\n");
     fclose(fp);
-    //string s((istreambuf_iterator<char>(levelFile)), istreambuf_iterator<char>());
-    //ifstream levelFile;
-    //levelFile.open("D:/Programming/Orbit/source_files/Levels/levels.json", ios_base::in); 
-    //levelFile.open("D:/Programming/Orbit/source_files/Levels/levels.json", ios_base::in); 
-    // if (!levelFile)
-    // {
-    //     printf( "Could not load levels file");
-    //     return false;
-    // }
 
     if (!levelsDocument.IsObject())
     {
@@ -88,22 +73,6 @@ bool get_levels()
         return false;
     }
 
-    // assert(levelsDocument.HasMember("background"));
-    // assert(levelsDocument["background"].IsString());
-    // printf("background = %s\n", levelsDocument["background"].GetString());
-    printf( "5\n");
-    //printf(content.c_str());
-
-    // FILE* fp = NULL;
-    // if ( (fp = fopen("D:/Programming/Orbit/source_files/levels.json", "rb")) == NULL)
-    // {
-    //     printf( "Could not load levels file");
-    //     return false;
-    // }
-    // char readBuffer[65536];
-    // FileReadStream is(fp, readBuffer, sizeof(readBuffer));
-    // levelsDocument->ParseStream(is);
-    // fclose(fp);
     printf("Levels loaded\n");
     return true;
 }

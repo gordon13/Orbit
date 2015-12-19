@@ -5,7 +5,7 @@
         },
         "playerstart": {
             "x": 0,
-            "y": 0,
+            "y": 0
         },
         "objects": {
             "earth": {
@@ -14,7 +14,7 @@
                 "y": 0,
                 "scale": 1,
                 "gravity": 9.8,
-                "image": "resources/earth.bmp"
+                "image": "resources/earth.png"
             },
             "moon": {
                 "type": "planet",
@@ -22,7 +22,7 @@
                 "y": 0,
                 "scale": 1,
                 "gravity": 3,
-                "image": "resources/moon.bmp"
+                "image": "resources/moon.png"
             }
         }
     }
