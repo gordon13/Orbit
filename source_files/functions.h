@@ -2,8 +2,8 @@
 #define FUNCTIONS_H
 
 //The headers
-#include "SDL2\SDL.h"
-#include "SDL2\SDL_image.h"
+#include "SDL2/SDL.h"
+#include "SDL2/SDL_image.h"
 #include <string>
 
 //File Loader
@@ -11,6 +11,9 @@ SDL_Surface *load_image( std::string filename );
 
 //Surface blitter
 void apply_surface( int x, int y, SDL_Surface* source, SDL_Surface* destination, SDL_Rect* clip = NULL );
+
+//Initialization
+bool get_levels();
 
 //Initialization
 bool init();

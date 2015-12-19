@@ -1,18 +1,14 @@
 //The headers
-#include "SDL2\SDL.h"
+#include "SDL2/SDL.h"
 #include "globals.h"
+#include "../lib/rapidjson/document.h"
 
-//levels data
-char* levelsJSON = std::ifstream ifile("source_files/levels.json");
-Document d;
-d.Parse(levelsJSON);
-
-LevelsStruct
-
-printf(LevelsStruct)
+//Levels document
+Document levelsDocument;
 
 //The surfaces
 SDL_Surface *dot = NULL;
+SDL_Window *gWindow = NULL;
 SDL_Surface *screen = NULL;
 
 //The event structure

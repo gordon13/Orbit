@@ -7,7 +7,7 @@
             "x": 0,
             "y": 0,
         },
-        "objects": [
+        "objects": {
             "earth": {
                 "type": "planet",
                 "x": 0,
@@ -24,6 +24,6 @@
                 "gravity": 3,
                 "image": "resources/moon.bmp"
             }
-        ]
+        }
     }
 }

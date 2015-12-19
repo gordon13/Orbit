@@ -2,13 +2,10 @@
 and may not be redistributed without written permission.*/
 
 //Using SDL and standard IO
-#include <SDL2\SDL.h>
+#include "SDL2/SDL.h"
 #include "SDL2/SDL_image.h"
 #include <stdio.h>
 #include <string>
-
-//json
-#include "../lib/rapidjson/document.h"
 
 #include "constants.h"
 #include "classes.h"
@@ -21,12 +18,19 @@ int main( int argc, char* args[] )
     //Quit flag
     bool quit = false;
     
+
     //The dot that will be used
     Dot myDot;
     
     //The frame rate regulator
     Timer fps;
     
+    //get levels
+    if( get_levels() == false )
+    {
+        return 1;
+    }
+
     //Initialize
     if( init() == false )
     {
@@ -68,11 +72,11 @@ int main( int argc, char* args[] )
         //Show the dot on the screen
         myDot.show();
         
-        // //Update the screen
-        // if( SDL_UpdateWindowSurface( screen ) == -1 )
-        // {
-        //     return 1;    
-        // }
+        //Update the screen
+        if( SDL_UpdateWindowSurface( gWindow ) == -1 )
+        {
+            return 1;    
+        }
         
         //Cap the frame rate
         if( fps.get_ticks() < 1000 / FRAMES_PER_SECOND )
