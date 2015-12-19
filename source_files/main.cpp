@@ -49,6 +49,9 @@ int main( int argc, char* args[] )
         //Start the frame timer
         fps.start();
         
+        //==============//
+        //Handle input
+        //==============//
         //While there's events to handle
         while( SDL_PollEvent( &event ) )
         {
@@ -62,11 +65,21 @@ int main( int argc, char* args[] )
                 quit = true;
             }
         }
-        
+        //==============//
+        //Update position
+        //==============//
         //Move the dot
         myDot.move();
         
-        //Fill the screen white
+
+        //==============//
+        //Draw
+        // -background first
+        // -objects/characters
+        // -update screen (so things move)
+        // -cap framerate (for reasons?)
+        //==============//
+        
         SDL_FillRect( screen, &screen->clip_rect, SDL_MapRGB( screen->format, 0xFF, 0xFF, 0xFF ) );
         
         //Show the dot on the screen

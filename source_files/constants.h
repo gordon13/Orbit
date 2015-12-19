@@ -5,12 +5,12 @@
 #include <vector>
 
 //The screen attributes
-const int SCREEN_WIDTH = 640;
-const int SCREEN_HEIGHT = 480;
+const int SCREEN_WIDTH = 1024;
+const int SCREEN_HEIGHT = 1024;
 const int SCREEN_BPP = 32;
 
 //The frame rate
-const int FRAMES_PER_SECOND = 20;
+const int FRAMES_PER_SECOND = 60;
 
 //The dimensions of the dot
 const int DOT_WIDTH = 20;
