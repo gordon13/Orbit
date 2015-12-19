@@ -1,0 +1,29 @@
+{
+    "level1": {
+        "background": {
+            "image": "resources/space1.bmp"
+        },
+        "playerstart": {
+            "x": 0,
+            "y": 0,
+        },
+        "objects": [
+            "earth": {
+                "type": "planet",
+                "x": 0,
+                "y": 0,
+                "scale": 1,
+                "gravity": 9.8,
+                "image": "resources/earth.bmp"
+            },
+            "moon": {
+                "type": "planet",
+                "x": 500,
+                "y": 0,
+                "scale": 1,
+                "gravity": 3,
+                "image": "resources/moon.bmp"
+            }
+        ]
+    }
+}
