@@ -2,6 +2,28 @@
 #define CLASSES_H
 
 //The dot that will move around on the screen
+class Entity
+{
+    private:
+    //The X and Y offsets of the dot
+    int x, y;
+    
+    //The velocity of the dot
+    int xVel, yVel;
+    
+    public:
+    //Initializes the variables
+    Entity();
+    
+    //Moves the dot
+    void move();
+
+    void add_impulse();
+    
+    //Shows the dot on the screen
+    void show();
+};
+
 class Dot
 {
     private:

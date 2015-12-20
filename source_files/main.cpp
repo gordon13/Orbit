@@ -20,16 +20,10 @@ int main( int argc, char* args[] )
     
 
     //The dot that will be used
-    Dot myDot;
+    Dot player;
     
     //The frame rate regulator
     Timer fps;
-    
-    //get levels
-    if( get_levels() == false )
-    {
-        return 1;
-    }
 
     //Initialize
     if( init() == false )
@@ -56,7 +50,7 @@ int main( int argc, char* args[] )
         while( SDL_PollEvent( &event ) )
         {
             //Handle events for the dot
-            myDot.handle_input();
+            player.handle_input();
             
             //If the user has Xed out the window
             if( event.type == SDL_QUIT )
@@ -65,11 +59,13 @@ int main( int argc, char* args[] )
                 quit = true;
             }
         }
+
+
         //==============//
         //Update position
         //==============//
         //Move the dot
-        myDot.move();
+        player.move();
         
 
         //==============//
@@ -83,7 +79,7 @@ int main( int argc, char* args[] )
         SDL_FillRect( screen, &screen->clip_rect, SDL_MapRGB( screen->format, 0xFF, 0xFF, 0xFF ) );
         
         //Show the dot on the screen
-        myDot.show();
+        player.show();
         
         //Update the screen
         if( SDL_UpdateWindowSurface( gWindow ) == -1 )

@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <fstream>
 #include <iostream>
+#include <sstream>
 #include "constants.h"
 #include "functions.h"
 #include "globals.h"
@@ -54,31 +55,103 @@ void apply_surface( int x, int y, SDL_Surface* source, SDL_Surface* destination,
     SDL_BlitSurface( source, clip, destination, &offset );
 }
 
+
+bool get_user_data()
+{
+    FILE* fp = fopen("user_files/user.txt", "rb"); // non-Windows use "r"
+    if (!fp) {
+        printf( "File doesn't exist\n");
+        return false;
+    }
+    char readBuffer[65536];
+    FileReadStream is(fp, readBuffer, sizeof(readBuffer));
+    userDocument.ParseStream(is);
+    fclose(fp);
+
+    if (!userDocument.IsObject())
+    {
+        printf( "Could not load user data\n");
+        return false;
+    }
+    /*static const char* kTypeNames[] = { "Null", "False", "True", "Object", "Array", "String", "Number" };
+    for (Value::ConstMemberIterator itr = userDocument.MemberBegin(); itr != userDocument.MemberEnd(); ++itr)
+    {
+        printf("Type of member %s is %s\n", itr->name.GetString(), kTypeNames[itr->value.GetType()]);
+    }*/
+
+    Value::ConstMemberIterator itr_level = userDocument.FindMember("current_level");
+    Value::ConstMemberIterator itr_score = userDocument.FindMember("score");
+    if (itr_level == userDocument.MemberEnd() && itr_score == userDocument.MemberEnd())
+    {
+        printf("'current_level' and 'score' not found\n");
+        return false;
+    }
+    std::ostringstream oss;
+    current_level = itr_level->value.GetInt();
+    score = itr_score->value.GetInt();
+    printf("User data loaded\n");
+    printf("level: %d, score:%d \n", current_level, score);
+    return true;
+}
+
+
 bool get_levels()
 {
-    printf( "Attempting to read file...\n");
     FILE* fp = fopen("source_files/Levels/levels.txt", "rb"); // non-Windows use "r"
     if (!fp) {
         printf( "File doesn't exist\n");
         return false;
     }
-    char readBuffer[655360];
+    char readBuffer[65536];
     FileReadStream is(fp, readBuffer, sizeof(readBuffer));
     levelsDocument.ParseStream(is);
     fclose(fp);
 
     if (!levelsDocument.IsObject())
     {
-        printf( "Could not load levels file");
+        printf("Could not load levels file\n");
         return false;
     }
+
+    //find current level data
+    ostringstream convert;
+    convert << current_level;
+    string temp_str = convert.str();
+    const char* str_c_level = temp_str.c_str();
+
+    //convert.str()
+    printf("Get background for level %s \n", str_c_level);
+    //itr_level->;
+    Value::ConstMemberIterator itr_level = levelsDocument.FindMember(str_c_level);
+    Value::ConstMemberIterator itr_background = levelsDocument.FindMember("background");
+    Value::ConstMemberIterator itr_playerstart = levelsDocument.FindMember("player_start");
+    if (itr_background == levelsDocument.MemberEnd() && itr_playerstart == levelsDocument.MemberEnd())
+    {
+        printf("'background' and 'player start' not found\n");
+        return false;
+    }
+    itr_background->value.GetType();
+    //itr_playerstart["x"] == 0;
 
     printf("Levels loaded\n");
     return true;
 }
 
+
 bool init()
 {
+    //get user data
+    if( get_user_data() == false )
+    {
+        return false;
+    }
+
+    //get levels
+    if( get_levels() == false )
+    {
+        return false;
+    }
+
     //Initialize all SDL subsystems
     if( SDL_Init( SDL_INIT_EVERYTHING ) == -1 )
     {
@@ -111,10 +184,10 @@ bool init()
 bool load_files()
 {
     //Load the dot image
-    dot = load_image( "resources/doge.bmp" );
+    sPlayer = load_image( "resources/doge.bmp" );
     
-    //If there was a problem in loading the dot
-    if( dot == NULL )
+    //If there was a problem in loading the sPlayer
+    if( sPlayer == NULL )
     {
         return false;    
     }
@@ -126,7 +199,7 @@ bool load_files()
 void clean_up()
 {
     //Free the surface
-    SDL_FreeSurface( dot );
+    SDL_FreeSurface( sPlayer );
     SDL_FreeSurface( screen );
     
     //Quit SDL

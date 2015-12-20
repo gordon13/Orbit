@@ -51,26 +51,26 @@ void Dot::move()
     //Move the dot left or right
     x += xVel;
     
-    //If the dot went too far to the left or right
-    if( ( x < 0 ) || ( x + DOT_WIDTH > SCREEN_WIDTH ) )
-    {
-        //move back
-        x -= xVel;    
-    }
+    // //If the dot went too far to the left or right
+    // if( ( x < 0 ) || ( x + DOT_WIDTH > SCREEN_WIDTH ) )
+    // {
+    //     //move back
+    //     x -= xVel;    
+    // }
     
     //Move the dot up or down
     y += yVel;
     
-    //If the dot went too far up or down
-    if( ( y < 0 ) || ( y + DOT_HEIGHT > SCREEN_HEIGHT ) )
-    {
-        //move back
-        y -= yVel;    
-    }
+    // //If the dot went too far up or down
+    // if( ( y < 0 ) || ( y + DOT_HEIGHT > SCREEN_HEIGHT ) )
+    // {
+    //     //move back
+    //     y -= yVel;    
+    // }
 }
 
 void Dot::show()
 {
     //Show the dot
-    apply_surface( x, y, dot, screen );
+    apply_surface( x, y, sPlayer, screen );
 }
