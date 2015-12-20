@@ -3,7 +3,7 @@
         "background": {
             "image": "resources/space1.bmp"
         },
-        "playerstart": {
+        "player_start": {
             "x": 0,
             "y": 600
         },

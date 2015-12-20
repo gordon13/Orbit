@@ -14,16 +14,26 @@ and may not be redistributed without written permission.*/
 
 int main( int argc, char* args[] )
 {
+    //get user data
+    if( get_user_data() == false )
+    {
+        return false;
+    }
+
+    //get levels
+    if( get_levels() == false )
+    {
+        return false;
+    }
 
     //Quit flag
     bool quit = false;
-    
+
+    //The frame rate regulator
+    Timer fps;
 
     //The dot that will be used
     Dot player;
-    
-    //The frame rate regulator
-    Timer fps;
 
     //Initialize
     if( init() == false )
@@ -36,7 +46,8 @@ int main( int argc, char* args[] )
     {
         return 1;
     }
-
+    
+    
     //While the user hasn't quit
     while( quit == false )
     {

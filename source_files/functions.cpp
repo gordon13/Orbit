@@ -81,7 +81,7 @@ bool get_user_data()
 
     Value::ConstMemberIterator itr_level = userDocument.FindMember("current_level");
     Value::ConstMemberIterator itr_score = userDocument.FindMember("score");
-    if (itr_level == userDocument.MemberEnd() && itr_score == userDocument.MemberEnd())
+    if (itr_level == userDocument.MemberEnd() || itr_score == userDocument.MemberEnd())
     {
         printf("'current_level' and 'score' not found\n");
         return false;
@@ -120,37 +120,31 @@ bool get_levels()
     const char* str_c_level = temp_str.c_str();
 
     //convert.str()
-    printf("Get background for level %s \n", str_c_level);
-    //itr_level->;
+    printf("Get background and player_start for level %s \n", str_c_level);
+    //get current level object
     Value::ConstMemberIterator itr_level = levelsDocument.FindMember(str_c_level);
-    Value::ConstMemberIterator itr_background = levelsDocument.FindMember("background");
-    Value::ConstMemberIterator itr_playerstart = levelsDocument.FindMember("player_start");
-    if (itr_background == levelsDocument.MemberEnd() && itr_playerstart == levelsDocument.MemberEnd())
+
+    //get background image location
+    const Value& level_obj = levelsDocument[str_c_level];
+    background = level_obj["background"]["image"].GetString();
+
+    //get player start location
+    int xy[] = {level_obj["player_start"]["x"].GetInt(), level_obj["player_start"]["y"].GetInt()};
+    player_start.assign(xy, xy+2);
+
+    if (background.empty() || player_start.size() != 2)
     {
         printf("'background' and 'player start' not found\n");
         return false;
     }
-    itr_background->value.GetType();
-    //itr_playerstart["x"] == 0;
-
     printf("Levels loaded\n");
+    printf("Background: %s, Start pos:%d %d \n", background.c_str(), player_start[0], player_start[1]);
     return true;
 }
 
 
 bool init()
 {
-    //get user data
-    if( get_user_data() == false )
-    {
-        return false;
-    }
-
-    //get levels
-    if( get_levels() == false )
-    {
-        return false;
-    }
 
     //Initialize all SDL subsystems
     if( SDL_Init( SDL_INIT_EVERYTHING ) == -1 )

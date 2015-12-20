@@ -10,8 +10,8 @@
 Dot::Dot()
 {
     //Initialize the offsets
-    x = 0;
-    y = 0;
+    x = player_start[0];
+    y = player_start[1];
     
     //Initialize the velocity
     xVel = 0;

@@ -6,11 +6,12 @@
 #include <vector>
 
 using namespace rapidjson;
+using namespace std;
 
 //Levels data
 extern Document levelsDocument;
-extern std::string background;
-//extern std::vector <int, int> player_start;
+extern string background;
+extern vector<int> player_start;
 
 //user data
 extern Document userDocument;

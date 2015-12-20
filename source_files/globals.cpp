@@ -5,11 +5,12 @@
 #include <vector>
 
 using namespace rapidjson;
+using namespace std;
 
 //Levels data
 Document levelsDocument;
-std::string background;
-//std::vector <int, int> player_start;
+string background;
+vector<int> player_start;
 
 //Levels document
 Document userDocument;
