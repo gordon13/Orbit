@@ -69,8 +69,18 @@ void Dot::move()
     // }
 }
 
-void Dot::show()
+void Dot::show(int camX, int camY)
 {
     //Show the dot
-    apply_surface( x, y, sPlayer, screen );
+    apply_surface( x - camX, y - camY, sPlayer, screen );
+}
+
+int Dot::getPosX()
+{
+    return x;
+}
+
+int Dot::getPosY()
+{
+    return y;
 }

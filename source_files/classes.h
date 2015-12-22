@@ -1,7 +1,8 @@
 #ifndef CLASSES_H
 #define CLASSES_H
+#include <string>
+using namespace std;
 
-//The dot that will move around on the screen
 class Entity
 {
     private:
@@ -10,18 +11,39 @@ class Entity
     
     //The velocity of the dot
     int xVel, yVel;
-    
+
     public:
+    float getScale();
+
+    void setScale();
+
+    int getPosX();
+
+    int getPosY();
+
+    void setPosX(int xin);
+
+    void setPosY(int yin);
+
     //Initializes the variables
     Entity();
     
     //Moves the dot
-    void move();
+    void update();
+
+    //Shows the dot on the screen
+    void draw(SDL_Surface* entitySurface, int camX, int camY);
+
+    void clean_up();
+};
+
+class EntityPhysable : Entity
+{    
+    public:
+    //Initializes the variables
+    EntityPhysable();
 
     void add_impulse();
-    
-    //Shows the dot on the screen
-    void show();
 };
 
 class Dot
@@ -34,6 +56,15 @@ class Dot
     int xVel, yVel;
     
     public:
+    int getPosX();
+    int getPosY();
+    //The dimensions of the dot
+    static const int DOT_WIDTH = 20;
+    static const int DOT_HEIGHT = 20;
+
+    //Maximum axis velocity of the dot
+    static const int DOT_VEL = 10;
+    
     //Initializes the variables
     Dot();
     
@@ -44,7 +75,7 @@ class Dot
     void move();
     
     //Shows the dot on the screen
-    void show();
+    void show(int camX, int camY);
 };
 
 //The timer

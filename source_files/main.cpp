@@ -35,6 +35,12 @@ int main( int argc, char* args[] )
     //The dot that will be used
     Dot player;
 
+    //The earth
+    Entity earth;
+
+    //The camera area
+    SDL_Rect camera = { 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT };
+
     //Initialize
     if( init() == false )
     {
@@ -66,8 +72,10 @@ int main( int argc, char* args[] )
             //If the user has Xed out the window
             if( event.type == SDL_QUIT )
             {
+                printf("quit!\n");
                 //Quit the program
                 quit = true;
+                break;
             }
         }
 
@@ -78,6 +86,27 @@ int main( int argc, char* args[] )
         //Move the dot
         player.move();
         
+        //camera stuff
+        camera.x = ( player.getPosX() + Dot::DOT_WIDTH / 2 ) - SCREEN_WIDTH / 2;
+        camera.y = ( player.getPosY() + Dot::DOT_HEIGHT / 2 ) - SCREEN_HEIGHT / 2;
+
+        //Keep the camera in bounds
+        if( camera.x < 0 )
+        { 
+            camera.x = 0;
+        }
+        if( camera.y < 0 )
+        {
+            camera.y = 0;
+        }
+        if( camera.x > LEVEL_WIDTH - camera.w )
+        {
+            camera.x = LEVEL_WIDTH - camera.w;
+        }
+        if( camera.y > LEVEL_HEIGHT - camera.h )
+        {
+            camera.y = LEVEL_HEIGHT - camera.h;
+        }
 
         //==============//
         //Draw
@@ -88,9 +117,11 @@ int main( int argc, char* args[] )
         //==============//
         
         SDL_FillRect( screen, &screen->clip_rect, SDL_MapRGB( screen->format, 0xFF, 0xFF, 0xFF ) );
-        
+        apply_surface( 0, 0, sSpace, screen );
+        //draw earth
+        //earth.draw(camera.x, camera.y);
         //Show the dot on the screen
-        player.show();
+        player.show(camera.x, camera.y);
         
         //Update the screen
         if( SDL_UpdateWindowSurface( gWindow ) == -1 )

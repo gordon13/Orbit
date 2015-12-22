@@ -178,8 +178,14 @@ bool init()
 bool load_files()
 {
     //Load the dot image
+    // level array
+    //0 - background
+    //1 - player
+    //
     sPlayer = load_image( "resources/doge.bmp" );
-    
+    sSpace = load_image( background );
+
+
     //If there was a problem in loading the sPlayer
     if( sPlayer == NULL )
     {
@@ -194,6 +200,7 @@ void clean_up()
 {
     //Free the surface
     SDL_FreeSurface( sPlayer );
+    SDL_FreeSurface( sSpace );
     SDL_FreeSurface( screen );
     
     //Quit SDL

@@ -1,5 +1,5 @@
 #OBJS specifies which files to compile as part of the project
-OBJS = source_files/globals.cpp source_files/functions.cpp source_files/main.cpp source_files/timer.cpp source_files/dot.cpp
+OBJS = source_files/globals.cpp source_files/functions.cpp source_files/main.cpp source_files/timer.cpp source_files/dot.cpp source_files/entity.cpp
 
 #CC specifies which compiler we're using
 CC = g++

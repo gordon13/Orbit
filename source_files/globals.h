@@ -20,6 +20,7 @@ extern int current_level;
 
 
 //The surfaces
+extern SDL_Surface *sSpace;
 extern SDL_Surface *sPlayer;
 extern SDL_Window *gWindow;
 extern SDL_Surface *screen;
