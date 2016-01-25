@@ -25,6 +25,7 @@ class Ship : public Entity
                                 const FontHolder&);
 
         virtual unsigned int getCategory() const;
+        float			getMaxThrust() const;
 
     private:
         virtual void    drawCurrent(sf::RenderTarget& target,

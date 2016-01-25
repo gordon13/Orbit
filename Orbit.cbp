@@ -12,6 +12,8 @@
 				<Option type="1" />
 				<Option compiler="gcc" />
 				<Compiler>
+					<Add option="-std=c++11" />
+					<Add option="-Wall" />
 					<Add option="-g" />
 					<Add directory="include" />
 				</Compiler>
@@ -40,10 +42,10 @@
 		</Build>
 		<Compiler>
 			<Add option="-Wall" />
-			<Add directory="C:/sfml/sfml2/include" />
+			<Add directory="C:/SFML2/include" />
 		</Compiler>
 		<Linker>
-			<Add directory="C:/sfml/sfml2/lib" />
+			<Add directory="C:/SFML2/lib" />
 		</Linker>
 		<Unit filename="include/Application.h" />
 		<Unit filename="include/Button.h" />
@@ -58,6 +60,7 @@
 		<Unit filename="include/Label.h" />
 		<Unit filename="include/MenuState.h" />
 		<Unit filename="include/PauseState.h" />
+		<Unit filename="include/Planet.h" />
 		<Unit filename="include/Player.h" />
 		<Unit filename="include/ResourceHolder.h" />
 		<Unit filename="include/ResourceIdentifiers.h" />
@@ -88,6 +91,7 @@
 		<Unit filename="src/Label.cpp" />
 		<Unit filename="src/MenuState.cpp" />
 		<Unit filename="src/PauseState.cpp" />
+		<Unit filename="src/Planet.cpp" />
 		<Unit filename="src/Player.cpp" />
 		<Unit filename="src/ResourceHolder.cpp" />
 		<Unit filename="src/SceneNode.cpp" />

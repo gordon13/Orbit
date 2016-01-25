@@ -14,7 +14,7 @@ namespace
 }
 
 Ship::Ship(Type type, const TextureHolder& textures, const FontHolder& fonts)
-: Entity(Table[type].hitpoints)
+: Entity(Table[type].hitpoints, Table[type].mass)
 , mType(type)
 , mSprite(textures.get(Table[type].texture))
 , mHealthDisplay(nullptr)
@@ -42,6 +42,11 @@ void Ship::updateCurrent(sf::Time dt, CommandQueue& commands)
 
 	// Update texts
 	updateTexts();
+}
+
+float Ship::getMaxThrust() const
+{
+	return Table[mType].speed;
 }
 
 unsigned int Ship::getCategory() const

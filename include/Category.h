@@ -11,6 +11,7 @@ namespace Category
 		PlayerShip		    = 1 << 1,
 		AlliedShip	    	= 1 << 2,
 		EnemyShip   		= 1 << 3,
+		Planet         		= 1 << 4,
 	};
 }
 

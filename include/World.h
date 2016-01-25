@@ -6,11 +6,14 @@
 #include "SceneNode.h"
 #include "SpriteNode.h"
 #include "Ship.h"
+#include "Planet.h"
 #include <CommandQueue.h>
 #include <Command.h>
 
 #include <SFML/System/NonCopyable.hpp>
 #include <SFML/Graphics.hpp>
+
+using namespace std;
 
 namespace sf
 {
@@ -28,9 +31,15 @@ class World : private sf::NonCopyable
     private:
         void                    loadTextures();
         void                    buildScene();
+        void                    addPlanets();
+        void					addPlanet(Planet::Type type, float relX, float relY);
+        void					spawnPlanets();
+
         void                    adaptPlayerVelocity();
         void					adaptPlayerPosition();
         sf::FloatRect			getViewBounds() const;
+
+
 
 
     private:
@@ -40,6 +49,20 @@ class World : private sf::NonCopyable
             Main,
             LayerCount
         };
+
+        struct SpawnPoint
+		{
+			SpawnPoint(Planet::Type type, float x, float y)
+			: type(type)
+			, x(x)
+			, y(y)
+			{
+			}
+
+			Planet::Type type;
+			float x;
+			float y;
+		};
 
     private:
         sf::RenderWindow&       mWindow;
@@ -51,9 +74,11 @@ class World : private sf::NonCopyable
         CommandQueue            mCommandQueue;
 
         sf::FloatRect           mWorldBounds;
-        sf::Vector2f            mSpawnPosition;
+        sf::Vector2f			mSpawnPosition;
         float                   mScrollSpeed;
         Ship*                   mPlayerShip;
+
+        std::vector<SpawnPoint>		mPlanetSpawnPoints;
 };
 
 #endif // WORLD_H

@@ -1,42 +1,48 @@
 #include "Entity.h"
 #include <cassert>
 
-Entity::Entity(int hitpoints)
+Entity::Entity(int hitpoints, int mass)
 : mVelocity()
+, mCurrentVel()
+, mMass(mass)
 , mHitpoints(hitpoints)
 {
 }
 
 void Entity::setVelocity(sf::Vector2f velocity)
 {
-    mVelocity = velocity;
+    //mVelocity = velocity;
+    mCurrentVel = velocity;
 }
 
 void Entity::setVelocity(float vx, float vy)
 {
-    mVelocity.x = vx;
-    mVelocity.y = vy;
+    mCurrentVel.x = vx;
+    mCurrentVel.y = vy;
+    //mVelocity.x = vx;
+    //mVelocity.y = vy;
 }
 
 sf::Vector2f Entity::getVelocity() const
 {
-    return mVelocity;
+    return mCurrentVel;
+    //return mVelocity;
 }
 
 void Entity::accelerate(sf::Vector2f velocity)
 {
-	mVelocity += velocity;
+	mCurrentVel += mVelocity + velocity;
 }
 
 void Entity::accelerate(float vx, float vy)
 {
-	mVelocity.x += vx;
-	mVelocity.y += vy;
+	sf::Vector2f v(vx, vy);
+	mCurrentVel += mVelocity + v;
 }
 
 void Entity::updateCurrent(sf::Time dt, CommandQueue&)
 {
-    move(mVelocity * dt.asSeconds());
+    move(mCurrentVel * dt.asSeconds());
 }
 
 
