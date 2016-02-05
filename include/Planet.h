@@ -26,6 +26,7 @@ class Planet : public Entity
                                 const FontHolder&);
 
         virtual unsigned int getCategory() const;
+        sf::FloatRect        getBoundingRect() const;
 
     private:
         virtual void    drawCurrent(sf::RenderTarget& target,

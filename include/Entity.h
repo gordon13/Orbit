@@ -5,7 +5,7 @@
 #include "SceneNode.h"
 #include "CommandQueue.h"
 #include <SFML/Graphics.hpp>
-
+#include "Utility.h"
 using namespace std;
 
 class Entity : public SceneNode
@@ -15,6 +15,10 @@ class Entity : public SceneNode
 
         void            setVelocity(sf::Vector2f velocity);
         void            setVelocity(float vx, float vy);
+        void            setRotation(float rot);
+
+        void			doRotate(float rot);
+
         void			accelerate(sf::Vector2f velocity);
 		void			accelerate(float vx, float vy);
 
@@ -24,6 +28,7 @@ class Entity : public SceneNode
         int             getHitpoints() const;
         bool            isDestroyed() const;
 
+        float           getRotation() const;
         sf::Vector2f    getVelocity() const;
         sf::Vector2f    getFullVelocity() const;
 
@@ -37,6 +42,7 @@ class Entity : public SceneNode
 
 
     private:
+        float           mRotation;
         sf::Vector2f    mVelocity;
         sf::Vector2f    mCurrentVel;
         //sf::Vector2f    mForce;

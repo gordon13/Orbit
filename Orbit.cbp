@@ -60,6 +60,7 @@
 		<Unit filename="include/Label.h" />
 		<Unit filename="include/MenuState.h" />
 		<Unit filename="include/PauseState.h" />
+		<Unit filename="include/PhysicsManager.h" />
 		<Unit filename="include/Planet.h" />
 		<Unit filename="include/Player.h" />
 		<Unit filename="include/ResourceHolder.h" />
@@ -91,6 +92,7 @@
 		<Unit filename="src/Label.cpp" />
 		<Unit filename="src/MenuState.cpp" />
 		<Unit filename="src/PauseState.cpp" />
+		<Unit filename="src/PhysicsManager.cpp" />
 		<Unit filename="src/Planet.cpp" />
 		<Unit filename="src/Player.cpp" />
 		<Unit filename="src/ResourceHolder.cpp" />

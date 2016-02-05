@@ -17,6 +17,7 @@ World::World(sf::RenderWindow& window, FontHolder& fonts)
 , mSpawnPosition(mWorldView.getSize().x / 2.f, mWorldBounds.height - mWorldView.getSize().y / 2.f)
 , mScrollSpeed(-50.f)
 , mPlayerShip(nullptr)
+, mPhysicsManager()
 {
 	loadTextures();
 	buildScene();
@@ -39,9 +40,15 @@ void World::update(sf::Time dt)
 		mSceneGraph.onCommand(mCommandQueue.pop(), dt);
 	adaptPlayerVelocity();
 
+    // Collision detection and response (may destroy entities)
+	handleCollisions();
+
 	// Regular update step, adapt position (correct if outside view)
 	mSceneGraph.update(dt, mCommandQueue);
 	adaptPlayerPosition();
+
+	//apply physics
+	mPhysicsManager.update(dt);
 }
 
 void World::draw()
@@ -62,6 +69,81 @@ void World::loadTextures()
 	mTextures.load(Textures::Space, "resources/space1.bmp");
 	mTextures.load(Textures::Earth, "resources/earth.png");
 	mTextures.load(Textures::Moon, "resources/moon.png");
+}
+
+bool matchesCategories(SceneNode::Pair& colliders, Category::Type type1, Category::Type type2)
+{
+	unsigned int category1 = colliders.first->getCategory();
+	unsigned int category2 = colliders.second->getCategory();
+
+	// Make sure first pair entry has category type1 and second has type2
+	if (type1 & category1 && type2 & category2)
+	{
+		return true;
+	}
+	else if (type1 & category2 && type2 & category1)
+	{
+		std::swap(colliders.first, colliders.second);
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+
+void World::handleCollisions()
+{
+	std::set<SceneNode::Pair> collisionPairs;
+	mSceneGraph.checkSceneCollision(mSceneGraph, collisionPairs);
+
+	FOREACH(SceneNode::Pair pair, collisionPairs)
+	{
+		if (matchesCategories(pair, Category::PlayerShip, Category::Planet))
+		{
+			auto& player = static_cast<Ship&>(*pair.first);
+			sf::Vector2f playerPos= player.getPosition();
+			sf::Vector2f playerVel = player.getVelocity();
+			auto& planet = static_cast<Planet&>(*pair.second);
+			sf::Vector2f planetPos= planet.getPosition();
+			sf::Vector2f planetVel = planet.getVelocity();
+
+            sf::Vector2f diff = playerPos - planetPos;
+			// Collision: Player damage = enemy's remaining HP
+			//player.damage(enemy.getHitpoints());
+			//enemy.destroy();
+			printf("Hit!");
+            /*if  ( diff.x > 0) {
+                player.setVelocity(playerVel.x * -1, playerVel.y * -1);
+            } else {
+                //player.setVelocity(playerVel.x * -1, playerVel.y * -1);
+            }*/
+
+
+
+		}
+
+		/*else if (matchesCategories(pair, Category::PlayerAircraft, Category::Pickup))
+		{
+			auto& player = static_cast<Aircraft&>(*pair.first);
+			auto& pickup = static_cast<Pickup&>(*pair.second);
+
+			// Apply pickup effect to player, destroy projectile
+			pickup.apply(player);
+			pickup.destroy();
+		}
+
+		else if (matchesCategories(pair, Category::EnemyAircraft, Category::AlliedProjectile)
+			  || matchesCategories(pair, Category::PlayerAircraft, Category::EnemyProjectile))
+		{
+			auto& aircraft = static_cast<Aircraft&>(*pair.first);
+			auto& projectile = static_cast<Projectile&>(*pair.second);
+
+			// Apply projectile damage to aircraft, destroy projectile
+			aircraft.damage(projectile.getDamage());
+			projectile.destroy();
+		}*/
+	}
 }
 
 void World::buildScene()
@@ -100,6 +182,7 @@ void World::addPlanets()
 {
 	// Add enemies to the spawn point container
 	addPlanet(Planet::Earth,    0.f,  20.f);
+	addPlanet(Planet::Moon,    200.f,  1000.f);
 
 	// Sort all enemies according to their y value, such that lower enemies are checked first for spawning
 	std::sort(mPlanetSpawnPoints.begin(), mPlanetSpawnPoints.end(), [] (SpawnPoint lhs, SpawnPoint rhs)
@@ -123,6 +206,7 @@ void World::spawnPlanets()
 
 		std::unique_ptr<Planet> planet(new Planet(spawn.type, mTextures, mFonts));
 		planet->setPosition(spawn.x, spawn.y);
+		//mPhysicsManager.registerEntity(planet);
 		//planet->setRotation(180.f);
 
 		mSceneLayers[Main]->attachChild(std::move(planet));
@@ -158,4 +242,5 @@ sf::FloatRect World::getViewBounds() const
 {
 	return sf::FloatRect(mWorldView.getCenter() - mWorldView.getSize() / 2.f, mWorldView.getSize());
 }
+
 

@@ -2,21 +2,28 @@
 #include "CommandQueue.h"
 #include "Ship.h"
 #include "foreach.h"
-
+#include "Utility.h"
 #include <iostream>
 
 struct ShipMover
 {
     ShipMover(float vx, float vy)
-    : velocity(vx, vy)
+    : rotateVelocity(vx)
+    , input(vx, vy)
+    , velocity(vx, vy)
     {
     }
 
     void operator() (Ship& ship, sf::Time) const
     {
+
+        printf( "Rotation: %s RotateVel: %s MaxVel: %s MaxThrust %s \n", toString(ship.getRotation()).c_str(), toString(rotateVelocity).c_str(), toString(ship.getMaxRotateVelocity()).c_str(), toString(ship.getMaxThrust()).c_str() );
         ship.accelerate(velocity * ship.getMaxThrust());
+        ship.doRotate(rotateVelocity * ship.getMaxRotateVelocity());
     }
+    sf::Vector2f input;
     sf::Vector2f velocity;
+    float rotateVelocity;
 };
 
 Player::Player()
@@ -47,6 +54,7 @@ void Player::handleRealtimeInput(CommandQueue& commands)
 
 void Player::handleEvent(const sf::Event& event, CommandQueue& commands)
 {
+
 	if (event.type == sf::Event::KeyPressed)
 	{
 		// Check if pressed key appears in key binding, trigger command if so

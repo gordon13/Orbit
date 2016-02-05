@@ -24,8 +24,10 @@ class Ship : public Entity
                                 const TextureHolder& textures,
                                 const FontHolder&);
 
-        virtual unsigned int getCategory() const;
-        float			getMaxThrust() const;
+        virtual unsigned int    getCategory() const;
+        float			        getMaxThrust() const;
+        float			        getMaxRotateVelocity() const;
+        sf::FloatRect           getBoundingRect() const;
 
     private:
         virtual void    drawCurrent(sf::RenderTarget& target,

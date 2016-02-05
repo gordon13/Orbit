@@ -9,6 +9,7 @@
 #include "Planet.h"
 #include <CommandQueue.h>
 #include <Command.h>
+#include "PhysicsManager.h"
 
 #include <SFML/System/NonCopyable.hpp>
 #include <SFML/Graphics.hpp>
@@ -37,6 +38,7 @@ class World : private sf::NonCopyable
 
         void                    adaptPlayerVelocity();
         void					adaptPlayerPosition();
+        void					handleCollisions();
         sf::FloatRect			getViewBounds() const;
 
 
@@ -79,6 +81,10 @@ class World : private sf::NonCopyable
         Ship*                   mPlayerShip;
 
         std::vector<SpawnPoint>		mPlanetSpawnPoints;
+
+
+        // physics
+        PhysicsManager          mPhysicsManager;
 };
 
 #endif // WORLD_H

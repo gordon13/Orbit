@@ -35,7 +35,8 @@ void Ship::drawCurrent(sf::RenderTarget& target,
 
 void Ship::updateCurrent(sf::Time dt, CommandQueue& commands)
 {
-
+    const float* matrix = this->getWorldTransform().getMatrix();
+    printf("%s \n", toString(*matrix).c_str());
 	// Update enemy movement pattern; apply velocity
 	//updateMovementPattern(dt);
 	Entity::updateCurrent(dt, commands);
@@ -47,6 +48,11 @@ void Ship::updateCurrent(sf::Time dt, CommandQueue& commands)
 float Ship::getMaxThrust() const
 {
 	return Table[mType].speed;
+}
+
+float Ship::getMaxRotateVelocity() const
+{
+	return Table[mType].rotateVelocity;
 }
 
 unsigned int Ship::getCategory() const
@@ -66,6 +72,12 @@ void Ship::updateTexts()
 {
 	mHealthDisplay->setString(toString(getHitpoints()) + " HP");
 	mHealthDisplay->setPosition(0.f, 50.f);
-	mHealthDisplay->setRotation(-getRotation());
+	//mHealthDisplay->setRotation(-getRotation());
+}
+
+sf::FloatRect Ship::getBoundingRect() const
+{
+    return getWorldTransform()
+        .transformRect(mSprite.getGlobalBounds());
 }
 

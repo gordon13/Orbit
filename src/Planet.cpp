@@ -64,3 +64,10 @@ void Planet::updateTexts()
 	mHealthDisplay->setRotation(-getRotation());
 }
 
+sf::FloatRect Planet::getBoundingRect() const
+{
+    return getWorldTransform()
+        .transformRect(mSprite.getGlobalBounds());
+}
+
+

@@ -3,6 +3,7 @@
 
 Entity::Entity(int hitpoints, int mass)
 : mVelocity()
+, mRotation()
 , mCurrentVel()
 , mMass(mass)
 , mHitpoints(hitpoints)
@@ -23,10 +24,26 @@ void Entity::setVelocity(float vx, float vy)
     //mVelocity.y = vy;
 }
 
+void Entity::setRotation(float rot)
+{
+    mRotation = rot;
+}
+
+void Entity::doRotate(float rot)
+{
+    mRotation += rot;
+}
+
 sf::Vector2f Entity::getVelocity() const
 {
     return mCurrentVel;
     //return mVelocity;
+}
+
+float Entity::getRotation() const
+{
+    printf(toString(this->getWorldTransform().getMatrix()).c_str());
+    return mRotation;
 }
 
 void Entity::accelerate(sf::Vector2f velocity)
@@ -42,6 +59,7 @@ void Entity::accelerate(float vx, float vy)
 
 void Entity::updateCurrent(sf::Time dt, CommandQueue&)
 {
+    rotate(mRotation * dt.asSeconds());
     move(mCurrentVel * dt.asSeconds());
 }
 

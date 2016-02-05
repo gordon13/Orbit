@@ -8,10 +8,12 @@ std::vector<ShipData> initializeShipData()
     data[Ship::Basic].hitpoints = 100;
     data[Ship::Basic].mass = 20;
     data[Ship::Basic].speed = 20.f;
+    data[Ship::Basic].rotateVelocity = 5.f;
     data[Ship::Basic].texture = Textures::Basic;
     data[Ship::Super].hitpoints = 160;
     data[Ship::Super].mass = 20;
     data[Ship::Super].speed = 350.f;
+    data[Ship::Super].rotateVelocity = 15.f;
     data[Ship::Super].texture = Textures::Super;
     return data;
 }

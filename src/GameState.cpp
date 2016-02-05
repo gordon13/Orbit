@@ -14,6 +14,7 @@ void GameState::draw()
 
 bool GameState::update(sf::Time dt)
 {
+
 	mWorld.update(dt);
 
 	CommandQueue& commands = mWorld.getCommandQueue();

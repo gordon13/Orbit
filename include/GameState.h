@@ -19,8 +19,8 @@ class GameState : public State
         virtual bool        handleEvent(const sf::Event& event);
 
     private:
-        World       mWorld;
-        Player&     mPlayer;
+        World               mWorld;
+        Player&             mPlayer;
 };
 
 #endif // GAMESTATE_H

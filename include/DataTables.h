@@ -12,6 +12,7 @@ struct ShipData
     int hitpoints;
     int mass;
     float speed;
+    float rotateVelocity;
     Textures::ID texture;
 };
 
