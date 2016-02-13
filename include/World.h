@@ -10,6 +10,7 @@
 #include <CommandQueue.h>
 #include <Command.h>
 #include "PhysicsManager.h"
+#include "utility.h"
 
 #include <SFML/System/NonCopyable.hpp>
 #include <SFML/Graphics.hpp>
@@ -39,6 +40,7 @@ class World : private sf::NonCopyable
         void                    adaptPlayerVelocity();
         void					adaptPlayerPosition();
         void					handleCollisions();
+        void					handlePhysics();
         sf::FloatRect			getViewBounds() const;
 
 

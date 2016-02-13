@@ -8,10 +8,14 @@
 #include "Utility.h"
 using namespace std;
 
+#define PI 3.14159265
+
 class Entity : public SceneNode
 {
     public:
         explicit        Entity(int hitpoints, int mass);
+
+        float           getMass() const;
 
         void            setVelocity(sf::Vector2f velocity);
         void            setVelocity(float vx, float vy);
@@ -21,6 +25,7 @@ class Entity : public SceneNode
 
         void			accelerate(sf::Vector2f velocity);
 		void			accelerate(float vx, float vy);
+        void			accelerateTowards(float thrust, float angle);
 
 		void            repair(int points);
 		void            damage(int points);
@@ -29,6 +34,7 @@ class Entity : public SceneNode
         bool            isDestroyed() const;
 
         float           getRotation() const;
+        float           getOrientation() const;
         sf::Vector2f    getVelocity() const;
         sf::Vector2f    getFullVelocity() const;
 

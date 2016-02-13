@@ -143,6 +143,23 @@ void SceneNode::checkNodeCollision(SceneNode& node, std::set<Pair>& collisionPai
         child->checkNodeCollision(node, collisionPairs);
 }
 
+void SceneNode::compareSceneNodes(SceneNode& sceneGraph, std::set<Pair>& objPairs)
+{
+    compareNodes(sceneGraph, objPairs);
+
+	FOREACH(Ptr& child, sceneGraph.mChildren)
+		compareSceneNodes(*child, objPairs);
+}
+
+void SceneNode::compareNodes(SceneNode& node, std::set<Pair>& objPairs)
+{
+    if (this != &node /*&& collision(*this, node)*/)
+        objPairs.insert(std::minmax(this, &node));
+
+    FOREACH(Ptr& child, mChildren)
+        child->compareNodes(node, objPairs);
+}
+
 bool collision(const SceneNode& lhs, const SceneNode& rhs)
 {
 	return lhs.getBoundingRect().intersects(rhs.getBoundingRect());

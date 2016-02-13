@@ -24,7 +24,7 @@ World::World(sf::RenderWindow& window, FontHolder& fonts)
 
 	// Prepare the view
 	mWorldView.setCenter(mSpawnPosition);
-
+    mWorldView.zoom(3);
 	spawnPlanets();
 }
 
@@ -39,6 +39,9 @@ void World::update(sf::Time dt)
 	while (!mCommandQueue.isEmpty())
 		mSceneGraph.onCommand(mCommandQueue.pop(), dt);
 	adaptPlayerVelocity();
+
+    // apply physics to world
+    handlePhysics();
 
     // Collision detection and response (may destroy entities)
 	handleCollisions();
@@ -65,7 +68,6 @@ CommandQueue& World::getCommandQueue()
 void World::loadTextures()
 {
 	mTextures.load(Textures::Basic, "resources/doge.bmp");
-	//mTextures.load(Textures::Raptor, "Media/Textures/Raptor.png");
 	mTextures.load(Textures::Space, "resources/space1.bmp");
 	mTextures.load(Textures::Earth, "resources/earth.png");
 	mTextures.load(Textures::Moon, "resources/moon.png");
@@ -119,6 +121,7 @@ void World::handleCollisions()
                 //player.setVelocity(playerVel.x * -1, playerVel.y * -1);
             }*/
 
+            // do per pixel collision here
 
 
 		}
@@ -143,6 +146,54 @@ void World::handleCollisions()
 			aircraft.damage(projectile.getDamage());
 			projectile.destroy();
 		}*/
+	}
+}
+
+void World::handlePhysics()
+{
+    std::set<SceneNode::Pair> physicsPairs;
+	mSceneGraph.compareSceneNodes(mSceneGraph, physicsPairs);
+
+	FOREACH(SceneNode::Pair pair, physicsPairs)
+	{
+	    //cout << matchesCategories(pair, Category::PlayerShip, Category::Planet) << endl;
+		if (matchesCategories(pair, Category::PlayerShip, Category::Planet) /*|| matchesCategories(pair, Category::Planet, Category::Planet)*/)
+		{
+            auto& obj1 = static_cast<Ship&>(*pair.first);
+            float obj1Mass= obj1.getMass();
+			sf::Vector2f obj1Pos= obj1.getPosition();
+			sf::Vector2f obj1Vel = obj1.getVelocity();
+
+			auto& obj2 = static_cast<Planet&>(*pair.second);
+			float obj2Mass= obj2.getMass();
+			sf::Vector2f obj2Pos= obj2.getPosition();
+			sf::Vector2f obj2Vel = obj2.getVelocity();
+
+            sf::Vector2f distanceVector = obj1Pos - obj2Pos;
+
+            //float distance = sqrt((obj1Pos.x - obj2Pos.x)*(obj1Pos.x - obj2Pos.x) + (obj1Pos.y - obj2Pos.y)*(obj1Pos.y - obj2Pos.y);
+            float distance = sqrt((distanceVector.x * distanceVector.x) + (distanceVector.y * distanceVector.y));
+
+
+			float gravity = (obj1Mass * obj2Mass) / (distance); // f= ma
+
+			sf::Vector2f obj1ToObj2Norm = obj2Pos - obj1Pos;
+			float length1 = sqrt((obj1ToObj2Norm.x * obj1ToObj2Norm.x) + (obj1ToObj2Norm.y * obj1ToObj2Norm.y));
+            if (length1 != 0)
+                obj1ToObj2Norm = sf::Vector2f(obj1ToObj2Norm.x / length1, obj1ToObj2Norm.y / length1);
+
+            // disabled gravity between planets because it makes things crazy!
+            //sf::Vector2f obj2ToObj1Norm = obj2Pos - obj1Pos;
+            //float length2 = sqrt((obj2ToObj1Norm.x * obj2ToObj1Norm.x) + (obj2ToObj1Norm.y * obj2ToObj1Norm.y));
+            //if (length2 != 0)
+            //    obj2ToObj1Norm = sf::Vector2f(obj2ToObj1Norm.x / length2, obj2ToObj1Norm.y / length2);
+
+            sf::Vector2f obj1ToObj2 = obj1ToObj2Norm; //normalise direction vector
+            //sf::Vector2f obj2ToObj1 = obj2ToObj1Norm; //normalise direction vector
+
+            obj1.accelerate( (obj1ToObj2 * gravity) / obj1Mass);
+            //obj2.accelerate( (obj2ToObj1 * gravity) / obj2Mass);
+		}
 	}
 }
 

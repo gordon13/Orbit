@@ -10,6 +10,11 @@ Entity::Entity(int hitpoints, int mass)
 {
 }
 
+float Entity::getMass() const
+{
+    return mMass;
+}
+
 void Entity::setVelocity(sf::Vector2f velocity)
 {
     //mVelocity = velocity;
@@ -31,6 +36,7 @@ void Entity::setRotation(float rot)
 
 void Entity::doRotate(float rot)
 {
+    //printf("Rot: %f \n",rot);
     mRotation += rot;
 }
 
@@ -42,8 +48,12 @@ sf::Vector2f Entity::getVelocity() const
 
 float Entity::getRotation() const
 {
-    printf(toString(this->getWorldTransform().getMatrix()).c_str());
     return mRotation;
+}
+
+float Entity::getOrientation() const
+{
+    return this->Transformable::getRotation() + 90;
 }
 
 void Entity::accelerate(sf::Vector2f velocity)
@@ -54,6 +64,14 @@ void Entity::accelerate(sf::Vector2f velocity)
 void Entity::accelerate(float vx, float vy)
 {
 	sf::Vector2f v(vx, vy);
+	mCurrentVel += mVelocity + v;
+}
+
+void Entity::accelerateTowards(float thrust, float angle)
+{
+    //ship.accelerate(cos(rotateVelocity) * getMaxThrust(), sin(rotateVelocity) * getMaxThrust());
+    //printf("%f \n",angle);
+	sf::Vector2f v(cos(angle*PI/180) * thrust, sin(angle*PI/180) * thrust);
 	mCurrentVel += mVelocity + v;
 }
 

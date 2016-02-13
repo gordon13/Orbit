@@ -10,16 +10,14 @@ struct ShipMover
     ShipMover(float vx, float vy)
     : rotateVelocity(vx)
     , input(vx, vy)
-    , velocity(vx, vy)
+    , velocity(0, vy)
     {
     }
-
+//soh cah toa
     void operator() (Ship& ship, sf::Time) const
     {
-
-        printf( "Rotation: %s RotateVel: %s MaxVel: %s MaxThrust %s \n", toString(ship.getRotation()).c_str(), toString(rotateVelocity).c_str(), toString(ship.getMaxRotateVelocity()).c_str(), toString(ship.getMaxThrust()).c_str() );
-        ship.accelerate(velocity * ship.getMaxThrust());
-        ship.doRotate(rotateVelocity * ship.getMaxRotateVelocity());
+        ship.accelerateTowards(velocity.y * ship.getMaxThrust(), ship.getOrientation()); //degrees
+        ship.doRotate(rotateVelocity * ship.getMaxRotateVelocity()); // 5 degrees
     }
     sf::Vector2f input;
     sf::Vector2f velocity;

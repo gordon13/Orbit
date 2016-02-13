@@ -7,6 +7,7 @@
 #include <SFML/Window/Event.hpp>
 
 #include <map>
+#include <math.h>
 
 class CommandQueue;
 

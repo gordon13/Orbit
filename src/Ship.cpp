@@ -36,9 +36,9 @@ void Ship::drawCurrent(sf::RenderTarget& target,
 void Ship::updateCurrent(sf::Time dt, CommandQueue& commands)
 {
     const float* matrix = this->getWorldTransform().getMatrix();
-    printf("%s \n", toString(*matrix).c_str());
 	// Update enemy movement pattern; apply velocity
 	//updateMovementPattern(dt);
+
 	Entity::updateCurrent(dt, commands);
 
 	// Update texts
@@ -68,6 +68,9 @@ unsigned int Ship::getCategory() const
     }
 }
 
+
+
+
 void Ship::updateTexts()
 {
 	mHealthDisplay->setString(toString(getHitpoints()) + " HP");
@@ -79,5 +82,6 @@ sf::FloatRect Ship::getBoundingRect() const
 {
     return getWorldTransform()
         .transformRect(mSprite.getGlobalBounds());
+
 }
 

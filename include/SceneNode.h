@@ -41,6 +41,9 @@ class SceneNode : public sf::Transformable, public sf::Drawable, private sf::Non
         void				checkSceneCollision(SceneNode& sceneGraph, std::set<Pair>& collisionPairs);
         void                checkNodeCollision(SceneNode& node, std::set<Pair>& collisionPairs);
 
+        void                compareSceneNodes(SceneNode& node, std::set<Pair>& objPairs);
+        void                compareNodes(SceneNode& node, std::set<Pair>& objPairs);
+
     private:
         virtual void        updateCurrent(sf::Time dt, CommandQueue& commands);
         virtual void        updateChildren(sf::Time dt, CommandQueue& commands);
